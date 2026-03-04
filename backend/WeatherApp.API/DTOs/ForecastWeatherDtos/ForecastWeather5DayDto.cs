@@ -1,4 +1,4 @@
-namespace WeatherApp.API.DTOs;
+namespace WeatherApp.API.DTOs.ForecastWeatherDtos;
 
 public class ForecastWeather5DayDto
 {

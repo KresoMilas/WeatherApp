@@ -1,4 +1,5 @@
-using WeatherApp.API.DTOs;
+using WeatherApp.API.DTOs.CurrentWeatherDtos;
+using WeatherApp.API.DTOs.ForecastWeatherDtos;
 
 namespace WeatherApp.API.Services;
 public interface IWeatherService

@@ -1,6 +1,6 @@
-namespace WeatherApp.API.DTOs.HelperClasses;
-
 using System.Text.Json.Serialization;
+
+namespace WeatherApp.API.DTOs.HelperClasses;
 
 public class WeatherData
 {

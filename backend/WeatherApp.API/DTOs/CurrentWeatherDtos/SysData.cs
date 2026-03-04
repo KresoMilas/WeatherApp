@@ -1,4 +1,4 @@
-namespace WeatherApp.API.DTOs.HelperClasses.CurrentWeatherHelpers;
+namespace WeatherApp.API.DTOs.CurrentWeatherDtos;
 
 public class SysData
 {

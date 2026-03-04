@@ -1,6 +1,6 @@
-namespace WeatherApp.API.DTOs.HelperClasses.ForecastWeatherHelpers;
-
 using System.Text.Json.Serialization;
+
+namespace WeatherApp.API.DTOs.ForecastWeatherDtos;
 
 public class ForecastWeatherResponse
 {

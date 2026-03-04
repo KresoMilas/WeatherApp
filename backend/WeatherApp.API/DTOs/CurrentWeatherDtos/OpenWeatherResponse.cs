@@ -1,6 +1,6 @@
 using WeatherApp.API.DTOs.HelperClasses;
 
-namespace WeatherApp.API.DTOs.HelperClasses.CurrentWeatherHelpers;
+namespace WeatherApp.API.DTOs.CurrentWeatherDtos;
 
 public class OpenWeatherResponse
 {

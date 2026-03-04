@@ -1,7 +1,7 @@
-namespace WeatherApp.API.Controllers;
-
 using Microsoft.AspNetCore.Mvc;
 using WeatherApp.API.Services;
+
+namespace WeatherApp.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

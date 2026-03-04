@@ -1,6 +1,6 @@
 using WeatherApp.API.DTOs.HelperClasses;
 
-namespace WeatherApp.API.DTOs.HelperClasses.ForecastWeatherHelpers;
+namespace WeatherApp.API.DTOs.ForecastWeatherDtos;
 
 
 public class WeatherList

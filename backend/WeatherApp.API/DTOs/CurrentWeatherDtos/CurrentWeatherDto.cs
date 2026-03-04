@@ -1,4 +1,4 @@
-namespace WeatherApp.API.DTOs;
+namespace WeatherApp.API.DTOs.CurrentWeatherDtos;
 
 public class CurrentWeatherDto
 {

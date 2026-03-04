@@ -1,13 +1,12 @@
-namespace WeatherApp.API.DTOs;
+namespace WeatherApp.API.DTOs.ForecastWeatherDtos;
 
 public class ForecastWeatherDto
 {
     public double Clouds { get; set; }
-    public DateTime DateTime { get; set; } = DateTime.UtcNow;
+    public DateTime DateTime { get; set; } 
     public int Humidity { get; set; }
     public int Pressure { get; set; }
     public double Rain { get; set; }
-    public double Snow { get; set; }
     public double ChanceOfPrecipitation { get; set; }
     public double Temperature { get; set; }
     public double TemperatureMax { get; set; }
