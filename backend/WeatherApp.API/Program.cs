@@ -39,6 +39,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISearchHistoryService, SearchHistoryService>();
+builder.Services.AddScoped<IStatsService, StatsService>();
 
 var app = builder.Build();
 
