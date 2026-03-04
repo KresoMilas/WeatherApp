@@ -38,6 +38,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISearchHistoryService, SearchHistoryService>();
 
 var app = builder.Build();
 

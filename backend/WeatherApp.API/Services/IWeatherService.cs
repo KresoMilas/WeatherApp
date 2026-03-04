@@ -2,6 +2,7 @@ using WeatherApp.API.DTOs.CurrentWeatherDtos;
 using WeatherApp.API.DTOs.ForecastWeatherDtos;
 
 namespace WeatherApp.API.Services;
+
 public interface IWeatherService
 {
     Task<CurrentWeatherDto> GetCurrentWeatherAsync(double lat, double lon);
