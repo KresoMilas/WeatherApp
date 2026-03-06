@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { ReferenceLine } from 'recharts'
 
 type ForecastItem = {
   dateTime: string
@@ -209,13 +210,33 @@ export default function ForecastPage() {
                   weekday: 'short', hour: '2-digit', minute: '2-digit'
                 }),
                 temp: Math.round(item.temperature),
-                rain: Math.round(item.chanceOfPrecipitation * 100)
+                rain: Math.round(item.chanceOfPrecipitation * 100),
+                isMatch: selectedCondition === 'All' || item.weatherDescription === selectedCondition
               }))}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="time" tick={{ fontSize: 11 }} angle={-45} textAnchor="end" height={70} />
                 <YAxis tick={{ fontSize: 12 }} unit="°C" />
                 <Tooltip />
-                <Line type="monotone" dataKey="temp" stroke="var(--accent)" strokeWidth={2} dot={{ r: 2 }} name="Temp (°C)" />
+                {selectedCondition !== 'All' && filteredItems.map(item => (
+                  item.weatherDescription === selectedCondition ? (
+                    <ReferenceLine key={item.dateTime} x={new Date(item.dateTime).toLocaleDateString('en-US', {
+                      weekday: 'short', hour: '2-digit', minute: '2-digit'
+                    })} stroke="#339af0" strokeWidth={3} opacity={0.15} />
+                  ) : null
+                ))}
+                <Line
+                  type="monotone"
+                  dataKey="temp"
+                  stroke="var(--accent)"
+                  strokeWidth={2}
+                  dot={({ cx, cy, payload }) => {
+                    if (selectedCondition === 'All') {
+                      return <circle cx={cx} cy={cy} r={3} fill="var(--accent)" />
+                    }
+                    return <circle cx={cx} cy={cy} r={payload.isMatch ? 5 : 3} fill={payload.isMatch ? '#339af0' : '#bbb'} opacity={payload.isMatch ? 1 : 0.3} />
+                  }}
+                  name="Temp (°C)"
+                />
                 <Line type="monotone" dataKey="rain" stroke="#339af0" strokeWidth={1.5} dot={{ r: 2 }} name="Rain (%)" />
               </LineChart>
             </ResponsiveContainer>
