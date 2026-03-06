@@ -4,6 +4,8 @@ import RegisterPage from './pages/RegisterPage'
 import WeatherPage from './pages/WeatherPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
+import HistoryPage from './pages/HistoryPage'
+import StatsPage from './pages/StatsPage'
 
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/weather" element={<ProtectedRoute><WeatherPage /></ProtectedRoute>} />
+        <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
+        <Route path="/stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
