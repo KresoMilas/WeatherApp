@@ -1,42 +1,198 @@
-#root {
-  max-width: 1280px;
+/* ── Navbar ──────────────────────────────────────────────── */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.85rem 2rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+nav a {
+  font-weight: 500;
+}
+
+nav button {
+  background: transparent;
+  color: var(--danger);
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--danger);
+  margin-left: auto;
+}
+nav button:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+nav span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+/* ── Page wrapper ────────────────────────────────────────── */
+main {
+  max-width: 860px;
   margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ── Auth pages ──────────────────────────────────────────── */
+.auth-card {
+  max-width: 400px;
+  margin: 4rem auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+
+.auth-card h2 {
+  margin-top: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.auth-form label input {
+  color: var(--text);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auth-switch {
   text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* ── Error message ───────────────────────────────────────── */
+.error-msg {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ── Weather card ────────────────────────────────────────── */
+.weather-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.weather-card h2 {
+  margin-top: 0;
 }
 
-.card {
-  padding: 2em;
+.temp {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
 }
 
-.read-the-docs {
+.description {
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.weather-details {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ── History / Stats tables ──────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.data-table th {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Stats grid ──────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.stats-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.stats-card h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stats-card ul, .stats-card ol {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.stats-card li {
+  padding: 0.35rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-card li:last-child {
+  border-bottom: none;
+}
+
   color: #888;
 }

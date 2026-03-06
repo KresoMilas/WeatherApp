@@ -43,12 +43,15 @@ export default function WeatherPage() {
   if (!weather) return <p>Loading...</p>
 
   return (
-    <div>
+    <div className="weather-card">
       <h2>{weather.cityName}, {weather.country}</h2>
-      <p>{weather.temperature}°C — {weather.weatherDescription}</p>
-      <p>Feels like {weather.feelsLike}°C</p>
-      <p>Humidity: {weather.humidity}%</p>
-      <p>Wind: {weather.windSpeed} m/s</p>
+      <p className="temp">{Math.round(weather.temperature)}°C</p>
+      <p className="description">{weather.weatherDescription}</p>
+      <div className="weather-details">
+        <span>Feels like {Math.round(weather.feelsLike)}°C</span>
+        <span>Humidity {weather.humidity}%</span>
+        <span>Wind {weather.windSpeed} m/s</span>
+      </div>
     </div>
   )
 }

@@ -46,30 +46,35 @@ export default function StatsPage() {
   return (
     <div>
       <h2>Your Stats</h2>
-
-      <h3>Top Cities</h3>
-      <ul>
-        {stats.topCities.map((c, i) => (
-          <li key={i}>{c.cityName} — {c.searchCount} searches</li>
-        ))}
-      </ul>
-
-      <h3>Recent Searches</h3>
-      <ul>
-        {stats.recentSearches.map((r, i) => (
-          <li key={i}>
-            {r.cityName} — {r.weatherCondition} —{' '}
-            {new Date(r.searchDateTime).toLocaleString()}
-          </li>
-        ))}
-      </ul>
-
-      <h3>Weather Conditions</h3>
-      <ul>
-        {stats.conditionDistribution.map((c, i) => (
-          <li key={i}>{c.condition} — {c.count}×</li>
-        ))}
-      </ul>
+      <div className="stats-grid">
+        <div className="stats-card">
+          <h3>Top Cities</h3>
+          <ul>
+            {stats.topCities.map((c, i) => (
+              <li key={i}>{c.cityName} — {c.searchCount} searches</li>
+            ))}
+          </ul>
+        </div>
+        <div className="stats-card">
+          <h3>Recent Searches</h3>
+          <ul>
+            {stats.recentSearches.map((r, i) => (
+              <li key={i}>
+                {r.cityName} — {r.weatherCondition} —{' '}
+                {new Date(r.searchDateTime).toLocaleString()}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="stats-card">
+          <h3>Weather Conditions</h3>
+          <ul>
+            {stats.conditionDistribution.map((c, i) => (
+              <li key={i}>{c.condition} — {c.count}×</li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }

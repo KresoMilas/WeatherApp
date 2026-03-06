@@ -29,28 +29,28 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
+    <div className="auth-card">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
+      <form onSubmit={handleSubmit} className="auth-form">
+        <label>
+          Email
           <input
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
           />
-        </div>
-        <div>
-          <label>Password</label>
+        </label>
+        <label>
+          Password
           <input
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-        </div>
-        <button type="submit">Login</button>
+        </label>
+        {error && <p className="error-msg">{error}</p>}
+        <button type="submit" className="btn-primary">Login</button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   )
 }

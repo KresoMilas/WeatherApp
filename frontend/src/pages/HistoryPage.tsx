@@ -32,14 +32,24 @@ export default function HistoryPage() {
       {history.length === 0 ? (
         <p>No searches yet.</p>
       ) : (
-        <ul>
-          {history.map((item, i) => (
-            <li key={i}>
-              <strong>{item.city}</strong> — {item.weatherDescription} —{' '}
-              {new Date(item.searchDateTime).toLocaleString()}
-            </li>
-          ))}
-        </ul>
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>City</th>
+              <th>Condition</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {history.map((item, i) => (
+              <tr key={i}>
+                <td>{item.city}</td>
+                <td>{item.weatherDescription}</td>
+                <td>{new Date(item.searchDateTime).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   )
