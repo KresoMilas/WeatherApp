@@ -24,6 +24,9 @@ export default function ForecastPage() {
   const [forecast, setForecast] = useState<Forecast | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [selectedDayFrom, setSelectedDayFrom] = useState('')
+  const [selectedDayTo, setSelectedDayTo] = useState('')
+  const [selectedCondition, setSelectedCondition] = useState('All')
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -40,16 +43,55 @@ export default function ForecastPage() {
     if (res.ok) {
       const data = await res.json()
       setForecast(data)
+      setSelectedDayFrom('')
+      setSelectedDayTo('')
+      setSelectedCondition('All')
     } else {
       setError('City not found')
     }
     setLoading(false)
   }
 
-  const days: { label: string; night?: ForecastItem; morning?: ForecastItem; afternoon?: ForecastItem; evening?: ForecastItem; min: number; max: number; rain: number; wind: number }[] = []
+  // Build list of unique day labels
+  const dayLabels: string[] = []
   if (forecast) {
-    const grouped: Record<string, ForecastItem[]> = {}
     forecast.fiveDayForecastWeather.forEach(item => {
+      const label = new Date(item.dateTime).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })
+      if (!dayLabels.includes(label)) dayLabels.push(label)
+    })
+  }
+
+  // Build list of unique weather conditions
+  const conditionLabels: string[] = []
+  if (forecast) {
+    forecast.fiveDayForecastWeather.forEach(item => {
+      const condition = item.weatherDescription
+      if (!conditionLabels.includes(condition)) conditionLabels.push(condition)
+    })
+    conditionLabels.sort()
+  }
+
+  // Filter items by selected day only (condition filter highlights, not hides)
+  // Filter items by day range
+  const filteredItems = forecast && dayLabels.length > 0
+    ? forecast.fiveDayForecastWeather.filter(item => {
+        const label = new Date(item.dateTime).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })
+        if (!selectedDayFrom || !selectedDayTo) return true
+        const fromIdx = dayLabels.indexOf(selectedDayFrom)
+        const toIdx = dayLabels.indexOf(selectedDayTo)
+        const idx = dayLabels.indexOf(label)
+        return idx >= fromIdx && idx <= toIdx
+      })
+    : []
+
+  const isConditionMatch = (slot: ForecastItem | undefined) =>
+    selectedCondition === 'All' || (slot && slot.weatherDescription === selectedCondition)
+
+  // Group filtered items into day rows for the table
+  const days: { label: string; night?: ForecastItem; morning?: ForecastItem; afternoon?: ForecastItem; evening?: ForecastItem; min: number; max: number; rain: number; wind: number }[] = []
+  if (filteredItems.length > 0) {
+    const grouped: Record<string, ForecastItem[]> = {}
+    filteredItems.forEach(item => {
       const date = new Date(item.dateTime)
       const key = date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })
       if (!grouped[key]) grouped[key] = []
@@ -92,6 +134,31 @@ export default function ForecastPage() {
       {forecast && (
         <div>
           <h3>{forecast.cityName}, {forecast.country}</h3>
+
+          <div className="forecast-filters">
+            <label>
+              Days from:
+              <select value={selectedDayFrom} onChange={e => setSelectedDayFrom(e.target.value)}>
+                <option value="">All</option>
+                {dayLabels.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+            </label>
+            <label>
+              to:
+              <select value={selectedDayTo} onChange={e => setSelectedDayTo(e.target.value)}>
+                <option value="">All</option>
+                {dayLabels.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+            </label>
+            <label>
+              Filter by condition:
+              <select value={selectedCondition} onChange={e => setSelectedCondition(e.target.value)}>
+                <option value="All">All conditions</option>
+                {conditionLabels.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </label>
+          </div>
+
           <div className="forecast-table-wrapper">
             <table className="forecast-table">
               <thead>
@@ -110,16 +177,21 @@ export default function ForecastPage() {
                 {days.map(day => (
                   <tr key={day.label}>
                     <td className="yr-day-label">{day.label}</td>
-                    {([day.night, day.morning, day.afternoon, day.evening] as (ForecastItem | undefined)[]).map((slot, i) => (
-                      <td key={i} className="yr-slot">
-                        {slot ? (
-                          <>
-                            <img src={`https://openweathermap.org/img/wn/${slot.weatherIcon}.png`} alt={slot.weatherDescription} />
-                            <span className="yr-slot-desc">{slot.weatherDescription}</span>
-                          </>
-                        ) : <span className="yr-slot-empty">—</span>}
-                      </td>
-                    ))}
+                    {([day.night, day.morning, day.afternoon, day.evening] as (ForecastItem | undefined)[]).map((slot, i) => {
+                      const match = isConditionMatch(slot)
+                      const dimmed = selectedCondition !== 'All' && !match
+                      const highlighted = selectedCondition !== 'All' && match
+                      return (
+                        <td key={i} className={`yr-slot${dimmed ? ' yr-slot-dimmed' : ''}${highlighted ? ' yr-slot-highlighted' : ''}`}>
+                          {slot ? (
+                            <>
+                              <img src={`https://openweathermap.org/img/wn/${slot.weatherIcon}.png`} alt={slot.weatherDescription} />
+                              <span className="yr-slot-desc">{slot.weatherDescription}</span>
+                            </>
+                          ) : <span className="yr-slot-empty">—</span>}
+                        </td>
+                      )
+                    })}
                     <td className="yr-temp">{day.max}° / {day.min}°</td>
                     <td className="yr-rain">{day.rain > 0 ? `${day.rain}%` : ''}</td>
                     <td className="yr-wind">{day.wind} m/s</td>
@@ -132,7 +204,7 @@ export default function ForecastPage() {
           <div className="forecast-chart">
             <h4 style={{ marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Temperature Over Time</h4>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={forecast.fiveDayForecastWeather.map(item => ({
+              <LineChart data={filteredItems.map(item => ({
                 time: new Date(item.dateTime).toLocaleDateString('en-US', {
                   weekday: 'short', hour: '2-digit', minute: '2-digit'
                 }),
