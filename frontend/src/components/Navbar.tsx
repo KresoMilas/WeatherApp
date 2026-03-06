@@ -18,6 +18,7 @@ export default function Navbar() {
           <Link to="/weather">Weather</Link>
           <Link to="/history">History</Link>
           <Link to="/stats">Stats</Link>
+          <Link to="/forecast">Forecast</Link>
           <span>{email}</span>
           <button onClick={handleLogout}>Logout</button>
         </>
