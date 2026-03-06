@@ -30,8 +30,10 @@ export default function ForecastPage() {
     setLoading(true)
     setForecast(null)
 
+    const token = localStorage.getItem('token')
     const res = await fetch(
-      `http://localhost:5069/api/weather/forecast?city=${encodeURIComponent(city)}`
+      `http://localhost:5069/api/weather/forecast?city=${encodeURIComponent(city)}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     )
 
     if (res.ok) {

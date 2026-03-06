@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WeatherApp.API.Services;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WeatherApp.API.Controllers;
 
@@ -21,18 +22,23 @@ public class WeatherController : ControllerBase
     public async Task<IActionResult> GetCurrentWeather([FromQuery] double lat, [FromQuery] double lon)
     {
         var result = await _weatherService.GetCurrentWeatherAsync(lat, lon);
-        if (User.Identity?.IsAuthenticated == true)
-        {
-            var userEmail = User.FindFirstValue("email");
-            await _searchHistoryService.AddSearchHistoryAsync(userEmail!, result.CityName, result.WeatherMain);
-        }
         return Ok(result);
     }
 
+    [Authorize]
     [HttpGet("forecast")]  
     public async Task<IActionResult> GetForecast([FromQuery] string city)
     {
         var result = await _weatherService.Get5DayForecastAsync(city);
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            var userEmail = User.FindFirstValue("email");
+            var condition = result.FiveDayForecastWeather
+                                    .GroupBy(f => f.WeatherMain)
+                                    .OrderByDescending(g => g.Count())
+                                    .First().Key;
+            await _searchHistoryService.AddSearchHistoryAsync(userEmail!, result.CityName, condition);
+        }
         return Ok(result);
     }
 }

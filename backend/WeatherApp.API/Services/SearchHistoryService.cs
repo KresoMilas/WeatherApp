@@ -26,7 +26,7 @@ public class SearchHistoryService : ISearchHistoryService
         {
             UserId = user.Id,
             CityName = cityName,
-            WeatherCondition = weatherCondition,
+            WeatherCondition = weatherCondition,    
             SearchDateTime = DateTime.UtcNow
         };
 
