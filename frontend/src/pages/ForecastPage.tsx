@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 type ForecastItem = {
   dateTime: string
@@ -45,19 +46,29 @@ export default function ForecastPage() {
     setLoading(false)
   }
 
-  const days: string[] = []
-  const times: string[] = []
-  const lookup: Record<string, Record<string, ForecastItem>> = {}
+  const days: { label: string; night?: ForecastItem; morning?: ForecastItem; afternoon?: ForecastItem; evening?: ForecastItem; min: number; max: number; rain: number; wind: number }[] = []
   if (forecast) {
+    const grouped: Record<string, ForecastItem[]> = {}
     forecast.fiveDayForecastWeather.forEach(item => {
       const date = new Date(item.dateTime)
-      const day = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-      const timeKey = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-      if (!days.includes(day)) days.push(day)
-      if (!times.includes(timeKey)) times.push(timeKey)
-      if (!lookup[timeKey]) lookup[timeKey] = {}
-      lookup[timeKey][day] = item
+      const key = date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })
+      if (!grouped[key]) grouped[key] = []
+      grouped[key].push(item)
     })
+    for (const [label, items] of Object.entries(grouped)) {
+      const pick = (from: number, to: number) => items.find(i => { const h = new Date(i.dateTime).getHours(); return h >= from && h < to })
+      days.push({
+        label,
+        night: pick(0, 6),
+        morning: pick(6, 12),
+        afternoon: pick(12, 18),
+        evening: pick(18, 24),
+        min: Math.round(Math.min(...items.map(i => i.temperatureMin))),
+        max: Math.round(Math.max(...items.map(i => i.temperatureMax))),
+        rain: Math.round(Math.max(...items.map(i => i.chanceOfPrecipitation)) * 100),
+        wind: Math.round(Math.max(...items.map(i => i.windSpeed)))
+      })
+    }
   }
 
   return (
@@ -85,35 +96,57 @@ export default function ForecastPage() {
             <table className="forecast-table">
               <thead>
                 <tr>
-                  <th className="forecast-time-header"></th>
-                  {days.map(day => (
-                    <th key={day} className="forecast-day-header">{day}</th>
-                  ))}
+                  <th>Day</th>
+                  <th>Night</th>
+                  <th>Morning</th>
+                  <th>Afternoon</th>
+                  <th>Evening</th>
+                  <th>Temp</th>
+                  <th>Rain</th>
+                  <th>Wind</th>
                 </tr>
               </thead>
               <tbody>
-                {times.map(time => (
-                  <tr key={time}>
-                    <td className="forecast-time-label">{time}</td>
-                    {days.map(day => {
-                      const item = lookup[time]?.[day]
-                      return (
-                        <td key={day} className="forecast-cell">
-                          {item && (
-                            <>
-                              <img src={`https://openweathermap.org/img/wn/${item.weatherIcon}.png`} alt={item.weatherDescription} />
-                              <p className="forecast-temp">{Math.round(item.temperature)}°C</p>
-                              <p className="forecast-desc">{item.weatherDescription}</p>
-                              <p className="forecast-rain">💧 {Math.round(item.chanceOfPrecipitation * 100)}%</p>
-                            </>
-                          )}
-                        </td>
-                      )
-                    })}
+                {days.map(day => (
+                  <tr key={day.label}>
+                    <td className="yr-day-label">{day.label}</td>
+                    {([day.night, day.morning, day.afternoon, day.evening] as (ForecastItem | undefined)[]).map((slot, i) => (
+                      <td key={i} className="yr-slot">
+                        {slot ? (
+                          <>
+                            <img src={`https://openweathermap.org/img/wn/${slot.weatherIcon}.png`} alt={slot.weatherDescription} />
+                            <span className="yr-slot-desc">{slot.weatherDescription}</span>
+                          </>
+                        ) : <span className="yr-slot-empty">—</span>}
+                      </td>
+                    ))}
+                    <td className="yr-temp">{day.max}° / {day.min}°</td>
+                    <td className="yr-rain">{day.rain > 0 ? `${day.rain}%` : ''}</td>
+                    <td className="yr-wind">{day.wind} m/s</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className="forecast-chart">
+            <h4 style={{ marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Temperature Over Time</h4>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={forecast.fiveDayForecastWeather.map(item => ({
+                time: new Date(item.dateTime).toLocaleDateString('en-US', {
+                  weekday: 'short', hour: '2-digit', minute: '2-digit'
+                }),
+                temp: Math.round(item.temperature),
+                rain: Math.round(item.chanceOfPrecipitation * 100)
+              }))}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="time" tick={{ fontSize: 11 }} angle={-45} textAnchor="end" height={70} />
+                <YAxis tick={{ fontSize: 12 }} unit="°C" />
+                <Tooltip />
+                <Line type="monotone" dataKey="temp" stroke="var(--accent)" strokeWidth={2} dot={{ r: 2 }} name="Temp (°C)" />
+                <Line type="monotone" dataKey="rain" stroke="#339af0" strokeWidth={1.5} dot={{ r: 2 }} name="Rain (%)" />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
       )}

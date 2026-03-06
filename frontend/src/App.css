@@ -230,7 +230,7 @@ main {
   border-bottom: none;
 }
 
-/* ── Forecast table ─────────────────────────────────────── */
+/* ── Forecast table (yr.no style) ──────────────────────────── */
 .forecast-table-wrapper {
   overflow-x: auto;
   margin-top: 1rem;
@@ -241,67 +241,97 @@ main {
   border-collapse: collapse;
 }
 
-.forecast-day-header {
-  text-align: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.5rem 0.75rem;
-  border-bottom: 2px solid var(--accent);
-  white-space: nowrap;
-}
-
-.forecast-time-header {
-  border-bottom: 2px solid var(--accent);
-}
-
-.forecast-time-label {
-  font-size: 0.75rem;
+.forecast-table thead th {
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--text-muted);
-  padding: 0.4rem 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.5rem 0.5rem;
+  border-bottom: 2px solid var(--border);
+  text-align: center;
   white-space: nowrap;
-  border-right: 1px solid var(--border);
-  vertical-align: middle;
 }
 
-.forecast-cell {
-  text-align: center;
-  padding: 0.4rem 0.5rem;
+.forecast-table thead th:first-child {
+  text-align: left;
+}
+
+.forecast-table tbody tr {
   border-bottom: 1px solid var(--border);
-  border-left: 1px solid var(--border);
-  vertical-align: middle;
-  min-width: 110px;
 }
 
 .forecast-table tbody tr:nth-child(even) {
   background: var(--bg);
 }
 
-.forecast-cell img {
+.yr-day-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.5rem;
+  white-space: nowrap;
+}
+
+.yr-slot {
+  text-align: center;
+  padding: 0.4rem 0.3rem;
+  vertical-align: middle;
+}
+
+.yr-slot img {
+  width: 32px;
+  height: 32px;
   display: block;
   margin: 0 auto;
-  width: 36px;
-  height: 36px;
 }
 
-.forecast-temp {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0.1rem 0;
-}
-
-.forecast-desc {
-  font-size: 0.7rem;
+.yr-slot-desc {
+  display: block;
+  font-size: 0.65rem;
   color: var(--text-muted);
   text-transform: capitalize;
-  margin: 0;
+  margin-top: 0.1rem;
 }
 
-.forecast-rain {
-  font-size: 0.72rem;
+.yr-slot-temp {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 0.1rem;
+}
+
+.yr-slot-empty {
+  color: var(--border);
+}
+
+.yr-temp {
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.5rem;
+  white-space: nowrap;
+}
+
+.yr-rain {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #339af0;
+  padding: 0.4rem 0.5rem;
+}
+
+.yr-wind {
+  text-align: center;
+  font-size: 0.82rem;
   color: var(--text-muted);
-  margin: 0.1rem 0 0;
+  padding: 0.4rem 0.5rem;
+  white-space: nowrap;
+}
+
+.forecast-chart {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
