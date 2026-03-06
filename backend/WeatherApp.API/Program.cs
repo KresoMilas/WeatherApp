@@ -1,9 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.JsonWebTokens;
 using System.Text;
 using WeatherApp.API.Data;
 using WeatherApp.API.Services;
+
+// Stop ASP.NET from remapping JWT claim names to long URN-style names.
+// Without this, "email" in the token becomes a different claim name and
+// User.FindFirstValue("email") returns null.
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);
 
