@@ -38,6 +38,42 @@ main {
   padding: 2rem 1.5rem;
 }
 
+/* ── Weather widget ──────────────────────────────────────── */
+.weather-widget {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-size: 0.85rem;
+}
+
+.widget-location {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.widget-temp {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.widget-desc {
+  text-transform: capitalize;
+  color: var(--text-muted);
+}
+
+.widget-detail {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
 /* ── Auth pages ──────────────────────────────────────────── */
 .auth-card {
   max-width: 400px;

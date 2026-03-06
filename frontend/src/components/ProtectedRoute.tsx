@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
+import WeatherWidget from './WeatherWidget'
 
 type Props = {
   children: ReactNode
@@ -12,5 +13,10 @@ export default function ProtectedRoute({ children }: Props) {
     return <Navigate to="/login" replace />
   }
 
-  return <>{children}</>
+  return (
+    <>
+      <WeatherWidget />
+      {children}
+    </>
+  )
 }
