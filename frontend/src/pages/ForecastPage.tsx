@@ -53,7 +53,6 @@ export default function ForecastPage() {
     setLoading(false)
   }
 
-  // Build list of unique day labels
   const dayLabels: string[] = []
   if (forecast) {
     forecast.fiveDayForecastWeather.forEach(item => {
@@ -62,7 +61,6 @@ export default function ForecastPage() {
     })
   }
 
-  // Build list of unique weather conditions
   const conditionLabels: string[] = []
   if (forecast) {
     forecast.fiveDayForecastWeather.forEach(item => {
@@ -72,8 +70,6 @@ export default function ForecastPage() {
     conditionLabels.sort()
   }
 
-  // Filter items by selected day only (condition filter highlights, not hides)
-  // Filter items by day range
   const filteredItems = forecast && dayLabels.length > 0
     ? forecast.fiveDayForecastWeather.filter(item => {
         const label = new Date(item.dateTime).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })
@@ -88,7 +84,6 @@ export default function ForecastPage() {
   const isConditionMatch = (slot: ForecastItem | undefined) =>
     selectedCondition === 'All' || (slot && slot.weatherDescription === selectedCondition)
 
-  // Group filtered items into day rows for the table
   const days: { label: string; night?: ForecastItem; morning?: ForecastItem; afternoon?: ForecastItem; evening?: ForecastItem; min: number; max: number; rain: number; wind: number }[] = []
   if (filteredItems.length > 0) {
     const grouped: Record<string, ForecastItem[]> = {}
