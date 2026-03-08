@@ -211,6 +211,7 @@ export default function ForecastPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="time" tick={{ fontSize: 11 }} angle={-45} textAnchor="end" height={70} />
                 <YAxis tick={{ fontSize: 12 }} unit="°C" />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} unit="%" stroke="#339af0" />
                 <Tooltip />
                 {selectedCondition !== 'All' && filteredItems.map(item => (
                   item.weatherDescription === selectedCondition ? (
@@ -232,7 +233,15 @@ export default function ForecastPage() {
                   }}
                   name="Temp (°C)"
                 />
-                <Line type="monotone" dataKey="rain" stroke="#339af0" strokeWidth={1.5} dot={{ r: 2 }} name="Rain (%)" />
+                <Line
+                  type="monotone"
+                  dataKey="rain"
+                  yAxisId="right"
+                  stroke="#339af0"
+                  strokeWidth={1.5}
+                  dot={{ r: 2 }}
+                  name="Rain (%)"
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
