@@ -3,7 +3,6 @@ using WeatherApp.API.Models;
 using WeatherApp.API.DTOs.SearchHistoryDtos;
 using WeatherApp.API.Data;
 
-
 namespace WeatherApp.API.Services;
 
 public class SearchHistoryService : ISearchHistoryService

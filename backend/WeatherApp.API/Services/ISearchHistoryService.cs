@@ -1,5 +1,4 @@
 using WeatherApp.API.DTOs.SearchHistoryDtos;
-using WeatherApp.API.DTOs.ForecastWeatherDtos;
 
 namespace WeatherApp.API.Services;
 
