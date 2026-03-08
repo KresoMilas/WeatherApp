@@ -21,24 +21,38 @@ public class WeatherController : ControllerBase
     [HttpGet("current")]  
     public async Task<IActionResult> GetCurrentWeather([FromQuery] double lat, [FromQuery] double lon)
     {
-        var result = await _weatherService.GetCurrentWeatherAsync(lat, lon);
-        return Ok(result);
+        try
+        {
+             var result = await _weatherService.GetCurrentWeatherAsync(lat, lon);
+             return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [Authorize]
     [HttpGet("forecast")]  
     public async Task<IActionResult> GetForecast([FromQuery] string city)
     {
-        var result = await _weatherService.Get5DayForecastAsync(city);
-        if (User.Identity?.IsAuthenticated == true)
+        try
         {
-            var userEmail = User.FindFirstValue("email");
-            var condition = result.FiveDayForecastWeather
-                                    .GroupBy(f => f.WeatherMain)
-                                    .OrderByDescending(g => g.Count())
-                                    .First().Key;
-            await _searchHistoryService.AddSearchHistoryAsync(userEmail!, result.CityName, condition);
+            var result = await _weatherService.Get5DayForecastAsync(city);
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var userEmail = User.FindFirstValue("email");
+                var condition = result.FiveDayForecastWeather
+                                        .GroupBy(f => f.WeatherMain)
+                                        .OrderByDescending(g => g.Count())
+                                        .First().Key;
+                await _searchHistoryService.AddSearchHistoryAsync(userEmail!, result.CityName, condition);
+            }
+            return Ok(result);
         }
-        return Ok(result);
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }
