@@ -20,13 +20,14 @@ type Forecast = {
   fiveDayForecastWeather: ForecastItem[]
 }
 
+
 export default function ForecastPage() {
   const [city, setCity] = useState('')
   const [forecast, setForecast] = useState<Forecast | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [selectedDayFrom, setSelectedDayFrom] = useState('')
-  const [selectedDayTo, setSelectedDayTo] = useState('')
+  const [selectedDayFrom, setSelectedDayFrom] = useState<string>('')
+  const [selectedDayTo, setSelectedDayTo] = useState<string>('')
   const [selectedCondition, setSelectedCondition] = useState('All')
 
   async function handleSearch(e: React.FormEvent) {
@@ -44,8 +45,14 @@ export default function ForecastPage() {
     if (res.ok) {
       const data = await res.json()
       setForecast(data)
-      setSelectedDayFrom('')
-      setSelectedDayTo('')
+      // Set default day range to first and last day
+      const labels: string[] = []
+      data.fiveDayForecastWeather.forEach((item: ForecastItem) => {
+        const label = new Date(item.dateTime).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })
+        if (!labels.includes(label)) labels.push(label)
+      })
+      setSelectedDayFrom(labels[0] || '')
+      setSelectedDayTo(labels[labels.length - 1] || '')
       setSelectedCondition('All')
     } else {
       setError('City not found')
@@ -73,7 +80,6 @@ export default function ForecastPage() {
   const filteredItems = forecast && dayLabels.length > 0
     ? forecast.fiveDayForecastWeather.filter(item => {
         const label = new Date(item.dateTime).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })
-        if (!selectedDayFrom || !selectedDayTo) return true
         const fromIdx = dayLabels.indexOf(selectedDayFrom)
         const toIdx = dayLabels.indexOf(selectedDayTo)
         const idx = dayLabels.indexOf(label)
@@ -135,14 +141,12 @@ export default function ForecastPage() {
             <label>
               Days from:
               <select value={selectedDayFrom} onChange={e => setSelectedDayFrom(e.target.value)}>
-                <option value="">All</option>
                 {dayLabels.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </label>
             <label>
               to:
               <select value={selectedDayTo} onChange={e => setSelectedDayTo(e.target.value)}>
-                <option value="">All</option>
                 {dayLabels.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </label>
